@@ -7,7 +7,7 @@ docker based on php:apache-buster and nielsengelen/vbo365-rest pre-installed
 ```
 version: "2.1"
 services:
-  swag:
+  vbo365:
     image: vbo365-rest:mme
     container_name: vbo365-rest
     cap_add:
@@ -22,6 +22,29 @@ services:
     ports:
       - 88:80
     restart: unless-stopped 
+  rproxy:
+    image: linuxserver/letsencrypt
+    container_name: rproxy
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Zurich
+      - URL=e-novinfo.ch
+      - SUBDOMAINS=veeam-sp
+      - VALIDATION=http
+      - EMAIL= support@e-novinfo.ch
+      - ONLY_SUBDOMAINS=true
+      #- EXTRA_DOMAINS= #optional
+      #- STAGING=false #optional
+    volumes:
+      - /opt/letsencrpyt/config:/config
+    ports:
+      - 443:443
+      - 80:80 #optional
+    restart: unless-stopped
+
 ```
 
 ## Configuration
