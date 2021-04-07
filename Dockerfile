@@ -1,44 +1,59 @@
-version: "2.1"
-services:
-  vbo365:
-    image: vbo365-rest:mme
-    container_name: vbo365-rest
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Zurich
-    volumes:
-      - vbo365_config:/config      
-      - vbo365_data:/data
-    ports:
-      - 88:80
-    restart: unless-stopped 
-  rproxy:
-    image: linuxserver/letsencrypt
-    container_name: rproxy
-    cap_add:
-      - NET_ADMIN
-    links:
-      - vbo365
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Zurich
-      - URL=e-novinfo.ch
-      - SUBDOMAINS=veeam-sp,vbo365
-      - VALIDATION=http
-      - DNSPLUGIN=cloudflare #optional
-      - DUCKDNSTOKEN=<token> #optional
-      - EMAIL= support@e-novinfo.ch
-      - DHLEVEL=2048 
-      - ONLY_SUBDOMAINS=true
-      #- EXTRA_DOMAINS= #optional
-      - STAGING=false #optional
-    volumes:
-      - /opt/letsencrpyt/config:/config
-    ports:
-      - 443:443
-      - 80:80 #optional
-    restart: unless-stopped
+FROM php:7.4-apache
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Zurich
+# set version label
+ARG BUILD_DATE
+ARG VERSION
+LABEL build_version="e-novinfo VBO365-REST version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="mme"
+
+RUN apt-get update && apt-get install -yq zip unzip zlib1g-dev libzip-dev && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install zip
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+ADD . /var/www/html/
+
+WORKDIR /var/www/html
+
+RUN composer install
+
+RUN a2enmod rewrite
+
+RUN \
+
+service apache2 stop && \
+cd /  && \
+mkdir /data && \
+mkdir /config && \
+rm -rf /var/www/html && \
+ln -s /data /var/www/html && \
+mv /etc/apache2/* /config && \
+rm /etc/apache2 -rf && \
+echo "debug 1" && \
+ls -la /etc && \
+ln -s /config /etc/apache2 && \
+echo "debug 2" && \
+ls -la /etc && \
+service apache2 start && \
+
+
+
+#echo 'fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;' >> \
+#	/etc/nginx/fastcgi_params && \
+
+echo "**** install composer Dependency ****" && \
+curl -s https://getcomposer.org/installer | php && /bin/mv -f composer.phar /usr/local/bin/composer &&\
+cd /var/www/html &&\
+git clone https://github.com/nielsengelen/vbo365-rest.git /var/www/html/  &&\
+
+composer install
+# ports and volumes
+
+EXPOSE 80
+
+VOLUME /data
+VOLUME /config
+
+
+
