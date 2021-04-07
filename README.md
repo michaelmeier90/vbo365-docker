@@ -31,3 +31,6 @@ If this doesn't work, modify the original config.php file with your Veeam Backup
 
 **_Remember to enable mod_rewrite as described in the dependencies._**
 **_Remove the setup.php file once this is done._**
+
+## Configuration NGINX (Reverse Proxy)
+Add configuration file veeam-sp.e-novinfo.ch.conf in /config/nginx/proxy-confs folder 
