@@ -20,7 +20,7 @@ services:
       - vbo365_config:/config      
       - vbo365_data:/data
     ports:
-      - 4443:4443
+      - 88:80
     restart: unless-stopped 
 ```
 
