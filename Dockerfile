@@ -28,11 +28,7 @@ rm -rf /var/www/html && \
 ln -s /data /var/www/html && \
 mv /etc/apache2/* /config && \
 rm /etc/apache2 -rf && \
-echo "debug 1" && \
-ls -la /etc && \
 ln -s /config /etc/apache2 && \
-echo "debug 2" && \
-ls -la /etc && \
 service apache2 start && \
 
 
