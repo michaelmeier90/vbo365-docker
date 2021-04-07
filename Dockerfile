@@ -45,7 +45,8 @@ curl -s https://getcomposer.org/installer | php && /bin/mv -f composer.phar /usr
 cd /var/www/html &&\
 git clone https://github.com/nielsengelen/vbo365-rest.git /var/www/html/  &&\
 
-composer install
+composer install &&\
+chown www-data /data/config.php
 # ports and volumes
 
 
