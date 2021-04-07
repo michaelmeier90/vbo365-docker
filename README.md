@@ -17,8 +17,8 @@ services:
       - PGID=1000
       - TZ=Europe/Zurich
     volumes:
-      - /opt/vbo365/config:/config      
-      - /opt/vbo365/data:/data
+      - vbo365_config:/config      
+      - vbo365_data:/data
     ports:
       - 4443:4443
     restart: unless-stopped 
