@@ -20,14 +20,21 @@ php -r "unlink('composer-setup.php');" &&\
 
 echo "***** configure apache2 *****" && \
 a2enmod rewrite && \
-service apache2 restart && \
+service apache2 stop && \
 cd /  && \
 mkdir /data && \
 mkdir /config && \
 rm -rf /var/www/html && \
 ln -s /data /var/www/html && \
 mv /etc/apache2/* /config && \
+rm /etc/apache2 -rf && \
+echo "debug 1" && \
+ls -la /etc && \
 ln -s /config /etc/apache2 && \
+echo "debug 2" && \
+ls -la /etc && \
+service apache2 start && \
+
 
 
 #echo 'fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;' >> \
