@@ -23,3 +23,11 @@ services:
       - 4443:4443
     restart: unless-stopped 
 ```
+
+## Configuration
+Once composer has finished, open a web browser and go to setup.php, this allows you to generate a config file. 
+
+If this doesn't work, modify the original config.php file with your Veeam Backup for Microsoft Office 365 hostname/IP, port (default: 4443) and, API version to be used. Additionally, you can configure the custom title to be shown.
+
+**_Remember to enable mod_rewrite as described in the dependencies._**
+**_Remove the setup.php file once this is done._**
