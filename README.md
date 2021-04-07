@@ -18,8 +18,8 @@ services:
       - TZ=Europe/Zurich
     volumes:
       - /opt/vbo365/config:/config      
-      - /opt/vbo365/data:/data1
+      - /opt/vbo365/data:/data
     ports:
-      - 4443:80
+      - 4443:4443
     restart: unless-stopped 
 ```
